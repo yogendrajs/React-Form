@@ -1,0 +1,25 @@
+/* #reqname  {
+    display: none;
+    font-size: 12px;
+    color: red;
+    margin-left: 70px;
+    padding-top: -20px;
+} */
+
+#reqname, #reqemail, #reqpass{
+    font-size: 12px;
+    display: none;
+    color: red;
+    margin-left: 70px;
+    padding-top: -20px;
+}
+
+
+
+#wholeform {
+    display: block;
+}
+
+#showname {
+    display: none;
+}
