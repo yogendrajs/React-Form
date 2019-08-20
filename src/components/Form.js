@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './Form.css';
+import swal from 'sweetalert';
 
 console.log(React.version);
 
@@ -42,62 +43,78 @@ class Form extends Component {
 
     submitData(event){
         event.preventDefault(); // preventing it from reloading the same page while pressing submit button.
-        
-        // document.getElementById('wholeform').style.display = 'none';
-        // document.getElementById('showname').style.display = 'block';
-        // alert(this.state.email)
-        // this.setState({
-        //     name: this.nameData(),
-        // })
+        let count = 0;
+        let {name, email, pass} = this.state;
 
-        let {state} = this;
-        let {name, email, pass} = state;
-
-        let passCondition = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+        let passCondition = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
         
+        // for checking the validation of the name
         if (name.length >= 5){
             document.getElementById('reqname').style.display = 'none';
-
-            if (email.includes('@') && email.includes('.')){
-                document.getElementById('reqemail').style.display = 'none';
-
-                if (pass.match(passCondition)){
-                    document.getElementById('reqpass').style.display = 'none';
-
-                    alert('Thanks for submission :)');
-                    window.location.reload();
-                }
-                else {
-                    document.getElementById('reqpass').style.display = 'block';
-                }
-            }else {
-                document.getElementById('reqemail').style.display = 'block';
-            }
+            count++;
         }else {
             document.getElementById('reqname').style.display = 'block';
+        }
+
+        // for checking the validation of email
+        if (email.includes('@') && email.includes('.')){
+            document.getElementById('reqemail').style.display = 'none';
+            count++;
+        }else {
+            document.getElementById('reqemail').style.display = 'block';
+            // document.getElementById('reqpass').style.display = 'block';
+        }
+
+        // for checking the validation of password
+        if (pass.match(passCondition)){
+            document.getElementById('reqpass').style.display = 'none';
+            count++;
+        }
+        else {
+            document.getElementById('reqpass').style.display = 'block';
+        }
+
+        // if all the three are correct!
+        if (count === 3){
+            // let {name, email, pass} = this.state;
+            swal("You made it!", "Thanks for submission!", "success");
+            // window.location.reload();
+            console.log(this.state)
+            this.setState({
+                name: '',
+                email: '',
+                pass: '',
+            })
         }
     }
 
     reqpass(){
-        return 'Your password should be 7 to 15 characters long which contain atleast one capital letter, one special character, numeric digits and first character must be a letter';
+        return 'Your password should be 6 to 15 characters long which contain atleast one capital letter, one special character, numeric digits and first character must be a letter';
     }
 
     render() {
         return (
-            <div>
-                <h2>This is the React Form</h2>
-
-                <form onSubmit={this.submitData} >
-                    Name: <input type="text" required="" onChange={this.nameData}/><br></br>
-                    <p id="reqname">Your name should be atleast 5 letters long.</p>
-
-                    Email: <input type="text" required="" onChange={this.emailData}/><br></br>
-                    <p id="reqemail">Please input correct Email.</p>
-
-                    Password: <input type="text" required="" onChange={this.pass}/><br></br>
-                    <p id="reqpass">{this.reqpass()}</p>
-                    <button>Submit</button>
-                </form>
+            <div className="page-content">
+                <div className="form-v5-content">
+                    <form className="form-detail" onSubmit={this.submitData}>
+                        <h2>React Submission Form</h2>
+                        <div className="form-row">
+                            <input type="text" className="input-text" placeholder="Your Name" onChange={this.nameData}/>
+                            <p id="reqname">Your name should be atleast 5 letters long.</p>
+                        </div>
+                        <div className="form-row">
+                            <input type="text" className="input-text" placeholder="Your Email" onChange={this.emailData}/>
+                            <p id="reqemail">Please input correct Email.</p>
+                        </div>
+                        <div className="form-row">
+                            <input type="password" className="input-text" placeholder="Your Password" onChange={this.pass}/>
+                            <p id="reqpass">{this.reqpass()}</p>
+                        </div>
+                        <div className="form-row-last">
+                            <input type="submit" name="register" className="register" value="Submit" />
+                        </div>
+                    </form>
+                </div>
             </div>
         )
     }
