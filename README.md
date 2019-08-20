@@ -11,4 +11,7 @@ Now, type `npm start` to start the *localhost* server at the default port of 300
 It would automatically start your app running right in your browser, otherwise you can simply go to http://localhost:3000/ to get the result.
 <br>
 
+This app is now hosted. Have a try at http://reactform.cf/ 
+<br>
+
 Happy Coding :)
