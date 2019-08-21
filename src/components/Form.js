@@ -9,82 +9,46 @@ class Form extends Component {
         super(props)
     
         this.state = {
-             name: '',
-             email: '',
-             pass: '',
+             name: false,
+             email: false,
+             pass: false,
         }
-        this.nameData = this.nameData.bind(this);
-        this.emailData = this.emailData.bind(this);
+
+        this.eventHandler = this.eventHandler.bind(this);
         this.submitData = this.submitData.bind(this);
-        this.pass = this.pass.bind(this);
         this.reqpass = this.reqpass.bind(this);
     }
 
-    nameData(event){
-        // event.preventDefault();
-        this.setState({
-            name: event.target.value,
-        })
+    eventHandler(event){
+
+        let {name, value} = event.target;
+        let passCondition = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+        switch(name){
+            case 'namedata':
+                let data1 = value.length >= 5 ? (document.getElementById('reqname').style.display = 'none', this.setState({name: false})) : (document.getElementById('reqname').style.display = 'block', this.setState({name: true}));
+                console.log(data1);
+                break;
+
+            case 'emaildata':
+                let data2 = (value.includes('@') && value.includes('.')) ? (document.getElementById('reqemail').style.display = 'none', this.setState({email: false})) : (document.getElementById('reqemail').style.display = 'block', this.setState({email: true}));
+                console.log(data2);
+                break;
+
+            case 'passdata':
+                let data3 = (value.match(passCondition)) ? (document.getElementById('reqpass').style.display = 'none', this.setState({pass: false})) : (document.getElementById('reqpass').style.display = 'block', this.setState({pass: true}));
+                console.log(data3);
+                break;
+            default: console.log('done');
+        }
     }
 
-    emailData(event){
-        // event.preventDefault();
-        // console.log(event.target.value);
-        this.setState({
-            email: event.target.value,
-        })
-    }
-    
-    pass(event){
-        this.setState({
-            pass: event.target.value,
-        })
-    }
 
     submitData(event){
+        console.log(event.target)
         event.preventDefault(); // preventing it from reloading the same page while pressing submit button.
-        let count = 0;
-        let {name, email, pass} = this.state;
-
-        let passCondition = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-        
-        // for checking the validation of the name
-        if (name.length >= 5){
-            document.getElementById('reqname').style.display = 'none';
-            count++;
-        }else {
-            document.getElementById('reqname').style.display = 'block';
-        }
-
-        // for checking the validation of email
-        if (email.includes('@') && email.includes('.')){
-            document.getElementById('reqemail').style.display = 'none';
-            count++;
-        }else {
-            document.getElementById('reqemail').style.display = 'block';
-            // document.getElementById('reqpass').style.display = 'block';
-        }
-
-        // for checking the validation of password
-        if (pass.match(passCondition)){
-            document.getElementById('reqpass').style.display = 'none';
-            count++;
-        }
-        else {
-            document.getElementById('reqpass').style.display = 'block';
-        }
-
-        // if all the three are correct!
-        if (count === 3){
-            // let {name, email, pass} = this.state;
+        const {name, email, pass} = this.state;
+        if (name === false && email === false && pass === false){
             swal("You made it!", "Thanks for submission!", "success");
-            // window.location.reload();
-            console.log(this.state)
-            this.setState({
-                name: '',
-                email: '',
-                pass: '',
-            })
         }
     }
 
@@ -99,15 +63,15 @@ class Form extends Component {
                     <form className="form-detail" onSubmit={this.submitData}>
                         <h2>React Submission Form</h2>
                         <div className="form-row">
-                            <input type="text" className="input-text" placeholder="Your Name" onChange={this.nameData}/>
+                            <input type="text" className="input-text" placeholder="Your Name" name="namedata" onChange={this.eventHandler}/>
                             <p id="reqname">Your name should be atleast 5 letters long.</p>
                         </div>
                         <div className="form-row">
-                            <input type="text" className="input-text" placeholder="Your Email" onChange={this.emailData}/>
+                            <input type="text" className="input-text" placeholder="Your Email" name="emaildata" onChange={this.eventHandler}/>
                             <p id="reqemail">Please input correct Email.</p>
                         </div>
                         <div className="form-row">
-                            <input type="password" className="input-text" placeholder="Your Password" onChange={this.pass}/>
+                            <input type="password" className="input-text" placeholder="Your Password" name="passdata" onChange={this.eventHandler}/>
                             <p id="reqpass">{this.reqpass()}</p>
                         </div>
                         <div className="form-row-last">
